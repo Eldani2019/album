@@ -48,6 +48,7 @@
             border: 1px solid #334155;
             color: #f8fafc;
         }
+        /* Scrollbar Aesthetic */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
@@ -58,7 +59,7 @@
 <div class="container py-5">
     <div class="text-center mb-4">
         <h1 class="fw-bold text-white">🏆 Álbum Tracker</h1>
-        <p class="text-muted">Búsquedas públicas. Modificaciones protegidas y contraseñas ocultas.</p>
+        <p class="text-muted">Búsquedas públicas. Modificaciones protegidas por 30 min.</p>
         <button id="btn-reset" class="btn btn-outline-secondary btn-sm mt-1 px-3" style="border-radius: 8px;">
             🔄 Restablecer al Estado Inicial (Borrar cambios)
         </button>
@@ -134,10 +135,252 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted small">Tu sesión durará 30 minutos.</p>
+                <p class="text-muted small">Para realizar modificaciones (añadir/quitar), por favor introduce las credenciales. Tu sesión durará 30 minutos.</p>
                 <form id="form-login">
                     <div class="mb-3">
                         <label class="form-label small text-muted">Usuario</label>
                         <input type="text" id="login-user" class="form-control bg-dark text-white border-secondary" required autocomplete="off">
                     </div>
-                    <div class="mb-3
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Contraseña</label>
+                        <input type="password" id="login-pass" class="form-control bg-dark text-white border-secondary" required>
+                    </div>
+                    <div id="login-error" class="text-danger small mb-3 fw-bold d-none">Usuario o contraseña incorrectos.</div>
+                    <button type="submit" class="btn btn-primary-custom w-100 text-white">Validar Identidad</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Datos Hardcoded de Respaldo Original
+    const ORIGINAL_FALTANTES = ["Fwc 1","Fwc 10","Fwc 12","Fwc 14","Fwc 17","Cc 1","Cc 2","Cc 3","Cc 4","Cc 5","Cc 6","Cc 7","Cc 8","Cc 9","Cc 10","Cc 11","Cc 12","Cc 13","Cc 14","Mex 4","Mex 15","Mex 20","Rsa 7","Rsa 14","Rsa 17","Kor 2","Kor 4","Kor 9","Kor 12","Kor 16","Kor 19","Kor 20","Cze 3","Cze 5","Cze 11","Cze 18","Cze 20","Can 2","Can 5","Can 6","Can 9","Can 12","Can 18","Bih 2","Bih 7","Bih 9","Bih 16","Bih 18","Bih 20","Qat 4","Qat 5","Qat 11","Qat 15","Qat 16","Qat 19","Sui 4","Sui 7","Sui 8","Sui 11","Sui 14","Sui 15","Sui 20","Bra 6","Bra 8","Bra 9","Bra 13","Bra 15","Bra 18","Bra 20","Mar 1","Mar 3","Mar 9","Mar 12","Mar 13","Mar 18","Hai 3","Hai 6","Hai 14","Hai 16","Hai 17","Hai 20","Sco 2","Sco 7","Sco 11","Sco 13","Sco 16","USA 1","USA 3","USA 5","USA 10","USA 17","USA 19","USA 20","Par 3","Par 7","Par 9","Par 10","Par 12","Par 16","Par 17","Par 19","Aus 3","Aus 10","Aus 12","Aus 17","Aus 20","Tur 3","Tur 9","Tur 10","Tur 12","Tur 15","Tur 17","Tur 20","Ger 2","Ger 3","Ger 6","Ger 7","Ger 9","Ger 10","Ger 15","Ger 18","Cuw 2","Cuw 3","Cuw 6","Cuw 11","Cuw 15","Cuw 17","Cuw 20","Civ 1","Civ 4","Civ 9","Civ 13","Civ 15","Civ 16","Civ 19","Ecu 1","Ecu 8","Ecu 9","Ecu 12","Ecu 13","Ecu 16","Ecu 18","Ned 2","Ned 4","Ned 6","Ned 10","Ned 13","Ned 15","Ned 16","Ned 17","Jpn 2","Jpn 8","Jpn 9","Jpn 16","Jpn 20","Swe 2","Swe 4","Swe 6","Swe 12","Swe 13","Tun 1","Tun 5","Tun 7","Tun 8","Tun 9","Tun 14","Tun 15","Tun 18","Bel 4","Bel 12","Bel 15","Bel 20","Egy 9","Egy 10","Egy 12","Egy 17","Egy 20","Irn 4","Irn 6","Irn 8","Irn 12","Irn 14","Irn 17","Nzl 3","Nzl 6","Nzl 8","Nzl 10","Nzl 11","Nzl 19","Esp 1","Esp 2","Esp 6","Esp 10","Esp 16","Cpv 1","Cpv 3","Cpv 6","Cpv 7","Cpv 11","Cpv 15","Ksa 4","Ksa 8","Ksa 12","Ksa 15","Ksa 18","Uru 1","Uru 4","Uru 5","Uru 8","Uru 10","Uru 12","Uru 13","Uru 14","Fra 5","Fra 7","Fra 13","Fra 18","Sen 1","Sen 12","Sen 14","Sen 18","Irq 3","Irq 5","Irq 9","Irq 13","Irq 17","Nor 1","Nor 2","Nor 3","Nor 7","Nor 12","Arg 3","Arg 13","Arg 17","Alg 3","Alg 9","Alg 15","Alg 19","Aut 1","Aut 3","Aut 5","Aut 7","Aut 10","Aut 12","Aut 13","Aut 15","Aut 16","Aut 18","Aut 20","Jor 2","Jor 6","Jor 9","Jor 12","Jor 17","Por 7","Por 11","Por 12","Por 13","Por 14","Por 20","Cod 5","Cod 7","Cod 20","Uzb 1","Uzb 4","Uzb 7","Uzb 8","Uzb 13","Uzb 15","Uzb 19","Col 4","Col 10","Col 14","Col 18","Eng 2","Eng 3","Eng 6","Eng 8","Eng 17","Eng 18","Eng 20","Cro 3","Cro 4","Cro 7","Cro 9","Cro 13","Gha 5","Gha 9","Gha 13","Gha 14","Gha 18","Gha 19","Pan 7","Pan 11","Pan 17","Pan 19","Pan 20"];
+    const ORIGINAL_REPETIDAS = {"Digitales": 26,"Pan 1": 1,"Cpv 16": 1,"Gha 1": 1,"Ned 7": 1,"Cze 1": 1,"Bel 1": 1,"Can 14": 1,"USA 12": 1,"Irn 1": 1,"Jpn 1": 1,"Fwc 13": 1,"Fwc 18": 1,"Irq 10": 1,"Sen 13": 1,"Cze 8": 1,"Cze 15": 1,"Cze 2": 1,"Pan 8": 1,"Pan 13": 1,"Jor 8": 1,"Col 6": 1,"Eng 14": 1,"Gha 11": 1,"Jpn 19": 1,"Ecu 6": 1,"Ger 16": 1,"Col 9": 1,"Cuw 12": 1,"Cpv 9": 1,"Cod 17": 1,"Aus 13": 1,"Fra 3": 1,"Arg 5": 1};
+
+    let faltantes = [...ORIGINAL_FALTANTES];
+    let repetidas = {...ORIGINAL_REPETIDAS};
+
+    let accionPendiente = null; 
+    let bsModalInstance = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        bsModalInstance = new bootstrap.Modal(document.getElementById('loginModal'));
+        renderAll();
+        setupListeners();
+    });
+
+    // --- MIDDLEWARE DE AUTENTICACIÓN (VÁLIDO POR 30 MIN) ---
+    function verificarAutenticacion(callbackAccion) {
+        const loginTimestamp = localStorage.getItem('tracker_login_time');
+        const ahora = new Date().getTime();
+        const mediaHora = 30 * 60 * 1000; // 30 minutos en milisegundos
+
+        if (loginTimestamp && (ahora - loginTimestamp < mediaHora)) {
+            // Sesión válida, ejecuta directo la acción
+            callbackAccion();
+        } else {
+            // Sesión expirada o inexistente: Guardamos qué quería hacer el usuario y abrimos modal
+            localStorage.removeItem('tracker_login_time');
+            accionPendiente = callbackAccion;
+            document.getElementById('login-error').classList.add('d-none');
+            document.getElementById('form-login').reset();
+            bsModalInstance.show();
+        }
+    }
+
+    function renderAll() {
+        const queryFaltantes = document.getElementById("buscar-faltantes").value;
+        const queryRepetidas = document.getElementById("buscar-repetidas").value;
+        renderFaltantes(queryFaltantes);
+        renderRepetidas(queryRepetidas);
+    }
+
+    function renderFaltantes(filter = "") {
+        const lista = document.getElementById("lista-faltantes");
+        lista.innerHTML = "";
+        const query = filter.toLowerCase().trim();
+        
+        let count = 0;
+        faltantes.forEach((item) => {
+            if (item.toLowerCase().includes(query)) {
+                count++;
+                const li = document.createElement("li");
+                li.className = "list-group-item list-group-item-custom d-flex justify-content-between align-items-center py-2";
+                
+                const spanText = document.createElement("span");
+                spanText.textContent = item;
+                
+                const btnMinus = document.createElement("button");
+                btnMinus.className = "btn btn-outline-danger btn-sm btn-minus";
+                btnMinus.innerHTML = "−";
+                btnMinus.onclick = () => verificarAutenticacion(() => retirarFaltante(item));
+
+                li.appendChild(spanText);
+                li.appendChild(btnMinus);
+                lista.appendChild(li);
+            }
+        });
+        document.getElementById("total-faltantes").textContent = count;
+    }
+
+    function renderRepetidas(filter = "") {
+        const lista = document.getElementById("lista-repetidas");
+        lista.innerHTML = "";
+        const query = filter.toLowerCase().trim();
+        
+        let totalAcumulado = 0;
+        Object.keys(repetidas).forEach(item => {
+            totalAcumulado += repetidas[item];
+            if (item.toLowerCase().includes(query)) {
+                const li = document.createElement("li");
+                li.className = "list-group-item list-group-item-custom d-flex justify-content-between align-items-center py-2";
+                
+                const containerInfo = document.createElement("div");
+                containerInfo.innerHTML = `${item} <span class="badge bg-secondary rounded-pill ms-1">${repetidas[item]}</span>`;
+                
+                const btnMinus = document.createElement("button");
+                btnMinus.className = "btn btn-outline-warning btn-sm btn-minus";
+                btnMinus.innerHTML = "−";
+                btnMinus.onclick = () => verificarAutenticacion(() => retirarRepetida(item));
+
+                li.appendChild(containerInfo);
+                li.appendChild(btnMinus);
+                lista.appendChild(li);
+            }
+        });
+        document.getElementById("total-repetidas").textContent = `Total: ${totalAcumulado}`;
+    }
+
+    function retirarFaltante(item) {
+        const idx = faltantes.indexOf(item);
+        if (idx !== -1) {
+            faltantes.splice(idx, 1);
+            renderAll();
+        }
+    }
+
+    function retirarRepetida(item) {
+        if (repetidas[item]) {
+            repetidas[item] -= 1;
+            if (repetidas[item] <= 0) {
+                delete repetidas[item];
+            }
+            renderAll();
+        }
+    }
+
+    function ejecutarRegistro() {
+        const input = document.getElementById("input-nueva");
+        let tarjeta = input.value.trim().replace(/\s+/g, ' ');
+        tarjeta = tarjeta.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        
+        const feedback = document.getElementById("feedback-registro");
+        if (!tarjeta) return;
+
+        const indexFaltante = faltantes.findIndex(f => f.toLowerCase() === tarjeta.toLowerCase());
+
+        if (indexFaltante !== -1) {
+            faltantes.splice(indexFaltante, 1);
+            feedback.className = "small mt-2 text-center text-success fw-bold";
+            feedback.textContent = `¡Faltante obtenido! Se eliminó de la lista de faltantes.`;
+        } else {
+            const keyExistente = Object.keys(repetidas).find(k => k.toLowerCase() === tarjeta.toLowerCase());
+            if (keyExistente) {
+                repetidas[keyExistente] += 1;
+            } else {
+                repetidas[tarjeta] = 1;
+            }
+            feedback.className = "small mt-2 text-center text-warning fw-bold";
+            feedback.textContent = `Añadida a Repetidas (+1).`;
+        }
+
+        input.value = "";
+        renderAll();
+        setTimeout(() => { feedback.textContent = ""; }, 4000);
+    }
+
+    function setupListeners() {
+        document.getElementById("buscar-faltantes").addEventListener("input", (e) => renderFaltantes(e.target.value));
+        document.getElementById("buscar-repetidas").addEventListener("input", (e) => renderRepetidas(e.target.value));
+
+        // Formulario de Registro protegido
+        document.getElementById("form-registro").addEventListener("submit", (e) => {
+            e.preventDefault();
+            verificarAutenticacion(() => ejecutarRegistro());
+        });
+
+        // Restablecer protegido
+        document.getElementById("btn-reset").addEventListener("click", () => {
+            verificarAutenticacion(() => {
+                if(confirm("¿Seguro que deseas borrar los registros nuevos y regresar al estado inicial?")) {
+                    faltantes = [...ORIGINAL_FALTANTES];
+                    repetidas = {...ORIGINAL_REPETIDAS};
+                    document.getElementById("buscar-faltantes").value = "";
+                    document.getElementById("buscar-repetidas").value = "";
+                    renderAll();
+                }
+            });
+        });
+
+        // MANEJO INTERNO DEL LOGIN FORM
+        document.getElementById("form-login").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const user = document.getElementById("login-user").value;
+            const pass = document.getElementById("login-pass").value;
+
+            if (user === "marrano" && pass === "marano") {
+                // Login Exitoso: Guardar timestamp actual
+                localStorage.setItem('tracker_login_time', new Date().getTime());
+                bsModalInstance.hide();
+                
+                // Ejecutar la acción que causó el bloqueo del login
+                if (accionPendiente) {
+                    accionPendiente();
+                    accionPendiente = null;
+                }
+            } else {
+                document.getElementById('login-error').classList.remove('d-none');
+            }
+        });
+
+        // --- MANEJO DE ARCHIVOS CSV (OPCIONAL) ---
+        document.getElementById("csv-faltantes").addEventListener("change", function(e) {
+            parseCSV(this.files[0], (data) => {
+                faltantes = data;
+                renderFaltantes();
+            });
+        });
+
+        document.getElementById("csv-repetidas").addEventListener("change", function(e) {
+            parseCSV(this.files[0], (data) => {
+                repetidas = {};
+                data.forEach(item => {
+                    if(item.includes(",")) {
+                        let parts = item.split(",");
+                        repetidas[parts[0].trim()] = parseInt(parts[1]) || 1;
+                    } else {
+                        let limpia = item.trim();
+                        if(limpia) repetidas[limpia] = (repetidas[limpia] || 0) + 1;
+                    }
+                });
+                renderRepetidas();
+            });
+        });
+    }
+
+    function parseCSV(file, callback) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const array = text.split(/[\n,\r]+/).map(item => item.trim()).filter(item => item.length > 0);
+            callback(array);
+        };
+        reader.readAsText(file);
+    }
+</script>
+
+</body>
+</html>
