@@ -136,12 +136,12 @@
                         </div>
                     </div>
                     <div class="col-md-6 d-flex flex-column justify-content-center px-4">
-                        <h6 class="text-success fw-bold mb-3">📤 Guardar / Exportar Datos</h6>
+                        <h6 class="text-success fw-bold mb-3">📋 Exportar / Copiar Datos</h6>
                         <button id="btn-export-faltantes" class="btn btn-outline-danger btn-sm mb-2 w-100 py-2">
-                            💾 Descargar CSV de Faltantes (Condensado)
+                            📋 Copiar Faltantes Condensados al Portapapeles
                         </button>
                         <button id="btn-export-repetidas" class="btn btn-outline-success btn-sm w-100 py-2">
-                            💾 Descargar CSV de Repetidas (Condensado)
+                            📋 Copiar Repetidas Condensadas al Portapapeles
                         </button>
                     </div>
                 </div>
@@ -222,7 +222,6 @@
         renderRepetidas(queryRepetidas);
     }
 
-    // Auxiliar para agrupar Faltantes
     function obtenerFaltantesAgrupados() {
         const grupos = {};
         faltantes.forEach(item => {
@@ -242,7 +241,6 @@
         return grupos;
     }
 
-    // Auxiliar para agrupar Repetidas dinámicamente { "Pan": [{num: 1, cant: 1}, {num: 13, cant: 2}] }
     function obtenerRepetidasAgrupadas() {
         const grupos = {};
         Object.keys(repetidas).forEach(item => {
@@ -257,7 +255,6 @@
                 grupos[item].push({ numero: null, cantidad: repetidas[item] });
             }
         });
-        // Ordenar numéricamente por subnúmero
         Object.keys(grupos).forEach(prefijo => {
             grupos[prefijo].sort((a, b) => (a.numero || 0) - (b.numero || 0));
         });
@@ -314,7 +311,6 @@
         document.getElementById("total-faltantes").textContent = totalUnidadesFaltantes;
     }
 
-    // --- NUEVO RENDER REPETIDAS AGRUPADO Y CONDENSADO ---
     function renderRepetidas(filter = "") {
         const lista = document.getElementById("lista-repetidas");
         lista.innerHTML = "";
@@ -323,11 +319,9 @@
         const grupos = obtenerRepetidasAgrupadas();
         let totalAcumulado = 0;
 
-        // Calcular total general de estampas repetidas físicas
         Object.keys(repetidas).forEach(k => totalAcumulado += repetidas[k]);
 
         Object.keys(grupos).forEach(prefijo => {
-            // Estructurar el texto: "Pan: 1 (x1), 13 (x2)"
             const formatoElementos = grupos[prefijo].map(el => {
                 return el.numero !== null ? `${el.numero} (x${el.cantidad})` : `(x${el.cantidad})`;
             });
@@ -384,7 +378,6 @@
     }
 
     function retirarRepetida(item) {
-        // Buscar coincidencia exacta sin importar mayúsculas
         const keyExistente = Object.keys(repetidas).find(k => k.toLowerCase().replace(/\s+/g, ' ') === item.toLowerCase().replace(/\s+/g, ' '));
         if (keyExistente && repetidas[keyExistente]) {
             repetidas[keyExistente] -= 1;
@@ -427,53 +420,51 @@
         setTimeout(() => { feedback.textContent = ""; }, 4000);
     }
 
+    // --- NUEVAS FUNCIONES PARA COPIAR AL CLIPBOARD ---
+    function copiarAlClipboard(texto, mensajeExito) {
+        navigator.clipboard.writeText(texto).then(() => {
+            alert(mensajeExito);
+        }).catch(err => {
+            console.error('Error al copiar al portapapeles: ', err);
+            alert("No se pudo copiar automáticamente. Inténtalo de nuevo.");
+        });
+    }
+
     function exportarFaltantesCSV() {
         if(faltantes.length === 0) {
-            alert("No hay elementos en la lista de faltantes para exportar.");
+            alert("No hay elementos en la lista de faltantes para copiar.");
             return;
         }
         const grupos = obtenerFaltantesAgrupados();
-        const lineasCSV = [];
+        const lineas = [];
         Object.keys(grupos).forEach(prefijo => {
             if (grupos[prefijo].length > 0) {
-                lineasCSV.push(`${prefijo}: ${grupos[prefijo].join(", ")}`);
+                lineas.push(`${prefijo}: ${grupos[prefijo].join(", ")}`);
             } else {
-                lineasCSV.push(prefijo);
+                lineas.push(prefijo);
             }
         });
-        descargarArchivo(lineasCSV.join("\n"), "faltantes_condensados.csv");
+        
+        copiarAlClipboard(lineas.join("\n"), "📋 ¡Lista de Faltantes condensada copiada al portapapeles con éxito!");
     }
 
-    // --- EXPORTE CONDENSADO DE REPETIDAS (Pan: 1 (x1), 13 (x2)) ---
     function exportarRepetidasCSV() {
         const grupos = obtenerRepetidasAgrupadas();
         const keysGrupos = Object.keys(grupos);
         if(keysGrupos.length === 0) {
-            alert("No hay elementos en la lista de repetidas para exportar.");
+            alert("No hay elementos en la lista de repetidas para copiar.");
             return;
         }
         
-        const lineasCSV = [];
+        const lineas = [];
         keysGrupos.forEach(prefijo => {
             const formatoElementos = grupos[prefijo].map(el => {
                 return el.numero !== null ? `${el.numero} (x${el.cantidad})` : `(x${el.cantidad})`;
             });
-            lineasCSV.push(`${prefijo}: ${formatoElementos.join(", ")}`);
+            lineas.push(`${prefijo}: ${formatoElementos.join(", ")}`);
         });
 
-        descargarArchivo(lineasCSV.join("\n"), "repetidas_condensadas.csv");
-    }
-
-    function descargarArchivo(contenido, nombreArchivo) {
-        const blob = new Blob([contenido], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", nombreArchivo);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        copiarAlClipboard(lineas.join("\n"), "📋 ¡Lista de Repetidas condensada copiada al portapapeles con éxito!");
     }
 
     function setupListeners() {
@@ -544,20 +535,19 @@
             parseCSV(this.files[0], (data) => {
                 repetidas = {};
                 data.forEach(linea => {
-                    // Soporte de importación tanto para el formato viejo "Pan 1, 2" como el condensado "Pan: 1 (x2), 13 (x1)"
                     if (linea.includes(":")) {
                         let partes = linea.split(":");
                         let prefijo = partes[0].trim();
                         let subElementos = partes[1].split(",").map(s => s.trim());
                         
                         subElementos.forEach(sub => {
-                            let matchCant = sub.match(/^(\d+)\s*\(x(\d+)\)$/); // Ej: "1 (x2)"
+                            let matchCant = sub.match(/^(\d+)\s*\(x(\d+)\)$/);
                             if (matchCant) {
                                 let num = matchCant[1];
                                 let cant = parseInt(matchCant[2]) || 1;
                                 repetidas[`${prefijo} ${num}`] = cant;
                             } else {
-                                let matchUnico = sub.match(/^\(x(\d+)\)$/); // Casos raros sin número de estampa
+                                let matchUnico = sub.match(/^\(x(\d+)\)$/);
                                 if (matchUnico) {
                                     repetidas[prefijo] = parseInt(matchUnico[1]) || 1;
                                 } else if(sub) {
