@@ -178,7 +178,31 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const ORIGINAL_FALTANTES = ["Fwc 1","Fwc 10","Fwc 14","Cc 1","Cc 2","Cc 3","Cc 4","Cc 5","Cc 6","Cc 7","Cc 8","Cc 9","Cc 10","Cc 11","Cc 12","Cc 13","Cc 14","Mex 4","Mex 15","Rsa 7","Kor 2","Kor 12","Kor 20","Cze 3","Cze 5","Cze 11","Cze 20","Can 2","Can 5","Can 6","Can 9","Can 18","Bih 7","Bih 9","Bih 16","Bih 18","Bih 20","Qat 4","Qat 5","Qat 11","Qat 15","Qat 16","Qat 19","Sui 4","Sui 7","Sui 8","Sui 11","Sui 14","Sui 15","Sui 20","Bra 6","Bra 9","Bra 13","Bra 15","Bra 20","Mar 1","Mar 9","Mar 12","Mar 18","Hai 6","Hai 14","Hai 16","Hai 17","Sco 2","Sco 7","Sco 13","Sco 16","USA 3","USA 10","Par 3","Par 7","Par 10","Par 17","Aus 3","Aus 10","Aus 12","Aus 17","Aus 20","Tur 3","Tur 9","Tur 10","Tur 12","Tur 15","Tur 17","Tur 20","Ger 2","Ger 6","Ger 7","Ger 9","Ger 10","Ger 15","Ger 18","Cuw 3","Cuw 6","Cuw 11","Cuw 15","Cuw 17","Cuw 20","Civ 1","Civ 4","Civ 9","Civ 13","Civ 15","Civ 19","Ecu 1","Ecu 9","Ecu 12","Ecu 18","Ned 2","Ned 10","Jpn 2","Jpn 20","Swe 2","Swe 4","Swe 6","Swe 12","Swe 13","Tun 1","Tun 7","Tun 8","Tun 9","Tun 18","Bel 12","Bel 15","Bel 20","Egy 9","Egy 10","Egy 17","Irn 4","Irn 6","Irn 8","Irn 12","Irn 14","Irn 17","Nzl 3","Nzl 6","Nzl 10","Nzl 11","Esp 1","Esp 2","Esp 6","Esp 16","Cpv 1","Cpv 3","Cpv 6","Cpv 7","Cpv 11","Cpv 15","Ksa 4","Ksa 8","Ksa 15","Ksa 18","Uru 1","Uru 4","Uru 10","Uru 12","Uru 13","Uru 14","Fra 5","Fra 7","Fra 13","Fra 18","Sen 1","Sen 12","Sen 14","Irq 3","Irq 5","Irq 9","Irq 13","Irq 17","Nor 2","Nor 3","Arg 17","Alg 3","Alg 9","Alg 15","Aut 1","Aut 3","Aut 5","Aut 7","Aut 12","Aut 13","Aut 15","Aut 16","Jor 2","Jor 17","Por 7","Por 11","Por 13","Por 14","Por 20","Cod 5","Cod 7","Cod 20","Uzb 1","Uzb 7","Uzb 13","Col 10","Col 18","Eng 2","Eng 6","Eng 8","Eng 18","Cro 3","Cro 4","Cro 7","Cro 9","Gha 9","Gha 13","Gha 18","Gha 19","Pan 7","Pan 11","Pan 17","Pan 19"];
+    const ORIGINAL_FALTANTES = [
+  "Fwc 1", "Fwc 10", "Fwc 14", "Cc 1", "Cc 2", "Cc 3", "Cc 4", "Cc 5", "Cc 6", "Cc 7", 
+  "Cc 8", "Cc 9", "Cc 10", "Cc 11", "Cc 12", "Cc 13", "Cc 14", "Mex 4", "Mex 15", "Rsa 7", 
+  "Kor 2", "Kor 12", "Kor 20", "Cze 3", "Cze 5", "Cze 11", "Cze 20", "Can 2", "Can 5", 
+  "Can 6", "Can 9", "Bih 7", "Bih 9", "Bih 16", "Bih 18", "Bih 20", "Qat 4", "Qat 5", 
+  "Qat 11", "Qat 15", "Qat 16", "Qat 19", "Sui 4", "Sui 7", "Sui 8", "Sui 11", "Sui 14", 
+  "Sui 15", "Sui 20", "Bra 6", "Bra 13", "Bra 15", "Bra 20", "Mar 1", "Mar 9", "Mar 12", 
+  "Mar 18", "Hai 6", "Hai 14", "Hai 16", "Hai 17", "Sco 7", "Sco 13", "Sco 16", "USA 3", 
+  "USA 10", "Par 3", "Par 7", "Par 10", "Par 17", "Aus 3", "Aus 10", "Aus 12", "Aus 17", 
+  "Aus 20", "Tur 3", "Tur 9", "Tur 10", "Tur 12", "Tur 15", "Tur 17", "Tur 20", "Ger 2", 
+  "Ger 6", "Ger 7", "Ger 9", "Ger 10", "Ger 15", "Ger 18", "Cuw 3", "Cuw 6", "Cuw 11", 
+  "Cuw 15", "Cuw 17", "Cuw 20", "Civ 1", "Civ 4", "Civ 9", "Civ 13", "Civ 15", "Civ 19", 
+  "Ecu 1", "Ecu 9", "Ecu 12", "Ecu 18", "Ned 2", "Ned 10", "Jpn 2", "Jpn 20", "Swe 2", 
+  "Swe 6", "Swe 12", "Tun 1", "Tun 7", "Tun 8", "Tun 9", "Tun 18", "Bel 12", "Bel 15", 
+  "Bel 20", "Egy 9", "Egy 10", "Egy 17", "Irn 4", "Irn 6", "Irn 8", "Irn 12", "Irn 14", 
+  "Irn 17", "Nzl 3", "Nzl 6", "Nzl 10", "Nzl 11", "Esp 1", "Esp 2", "Esp 6", "Esp 16", 
+  "Cpv 1", "Cpv 3", "Cpv 6", "Cpv 7", "Cpv 11", "Ksa 8", "Ksa 15", "Uru 1", "Uru 4", 
+  "Uru 10", "Uru 12", "Uru 13", "Uru 14", "Fra 5", "Fra 7", "Fra 13", "Fra 18", "Sen 1", 
+  "Sen 12", "Sen 14", "Irq 5", "Irq 9", "Irq 13", "Irq 17", "Nor 3", "Arg 17", "Alg 3", 
+  "Alg 9", "Alg 15", "Aut 1", "Aut 3", "Aut 5", "Aut 7", "Aut 12", "Aut 13", "Aut 15", 
+  "Aut 16", "Jor 2", "Jor 17", "Por 7", "Por 11", "Por 13", "Por 14", "Por 20", "Cod 5", 
+  "Cod 7", "Cod 20", "Uzb 1", "Uzb 7", "Col 18", "Eng 2", "Eng 6", "Eng 8", "Eng 18", 
+  "Cro 3", "Cro 4", "Cro 7", "Cro 9", "Gha 9", "Gha 13", "Gha 18", "Gha 19", "Pan 7", 
+  "Pan 11", "Pan 17", "Pan 19"
+];
     
     const ORIGINAL_REPETIDAS = {
   "Uru 7": 1,
