@@ -23,7 +23,7 @@
         }
         .list-group-item-custom {
             background: #1e293b;
-            color: #cbd5e1;
+            color: #f1f5f9;
             border: 1px solid #334155;
             transition: all 0.2s ease;
         }
@@ -42,11 +42,6 @@
             padding: 2px 8px;
             font-size: 0.85rem;
             border-radius: 6px;
-        }
-        .modal-content-custom {
-            background: #1e293b;
-            border: 1px solid #334155;
-            color: #f8fafc;
         }
         .form-control.bg-dark-custom {
             background-color: #0f172a !important;
@@ -70,8 +65,8 @@
 <div class="container py-5">
     <div class="text-center mb-4">
         <h1 class="fw-bold text-white">🏆 Álbum Tracker</h1>
-        <p class="text-muted">Búsquedas públicas. Modificaciones protegidas por 30 min.</p>
-        <button id="btn-reset" class="btn btn-outline-danger btn-sm mt-1 px-3" style="border-radius: 8px;">
+        <p class="text-light">Búsquedas públicas y modificaciones directas sin contraseñas.</p>
+        <button id="btn-reset" class="btn btn-outline-danger btn-sm mt-1 px-3" style="border-radius: 8px; font-weight: 500;">
             🔄 Restablecer al Estado Inicial (Borrar cambios guardados)
         </button>
     </div>
@@ -119,29 +114,17 @@
 
     <div class="row mt-5">
         <div class="col-12">
-            <div class="card card-custom p-3 opacity-75">
-                <p class="text-muted small m-0 text-center" style="cursor:pointer;" onclick="verificarAutenticacion(() => document.getElementById('csv-section').classList.toggle('d-none'))">
-                    ⚙️ Haz clic aquí para Importar / Exportar archivos .CSV (Anclado a tu almacenamiento - Requiere Login)
-                </p>
-                <div id="csv-section" class="row g-3 mt-2 d-none">
-                    <div class="col-md-6 border-end border-secondary">
-                        <h6 class="text-info fw-bold mb-2">📥 Importar Datos</h6>
-                        <div class="mb-2">
-                            <label class="form-label small text-muted mb-1">Subir CSV Faltantes</label>
-                            <input type="file" id="csv-faltantes" class="form-control form-control-sm bg-dark-custom" accept=".csv">
-                        </div>
-                        <div>
-                            <label class="form-label small text-muted mb-1">Subir CSV Repetidas</label>
-                            <input type="file" id="csv-repetidas" class="form-control form-control-sm bg-dark-custom" accept=".csv">
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-column justify-content-center px-4">
-                        <h6 class="text-success fw-bold mb-3">📋 Exportar / Copiar Datos</h6>
-                        <button id="btn-export-faltantes" class="btn btn-outline-danger btn-sm mb-2 w-100 py-2">
-                            📋 Copiar Faltantes Condensados al Portapapeles
+            <div class="card card-custom p-4 shadow-sm">
+                <h6 class="text-white fw-bold mb-3 text-center">📋 Exportar / Copiar Datos al Portapapeles</h6>
+                <div class="row g-2 justify-content-center">
+                    <div class="col-md-5">
+                        <button id="btn-export-faltantes" class="btn btn-outline-danger btn-sm w-100 py-2 fw-semibold">
+                            📋 Copiar Faltantes Condensados
                         </button>
-                        <button id="btn-export-repetidas" class="btn btn-outline-success btn-sm w-100 py-2">
-                            📋 Copiar Repetidas Condensadas al Portapapeles
+                    </div>
+                    <div class="col-md-5">
+                        <button id="btn-export-repetidas" class="btn btn-outline-success btn-sm w-100 py-2 fw-semibold">
+                            📋 Copiar Repetidas Condensadas
                         </button>
                     </div>
                 </div>
@@ -150,240 +133,148 @@
     </div>
 </div>
 
-<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content modal-content-custom shadow-lg">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title fw-bold text-warning">🔒 Autenticación Requerida</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-muted small">Para realizar modificaciones (añadir/quitar), por favor introduce las credenciales. Tu sesión durará 30 minutos.</p>
-                <form id="form-login">
-                    <div class="mb-3">
-                        <label class="form-label small text-muted">Usuario</label>
-                        <input type="text" id="login-user" class="form-control bg-dark-custom" required autocomplete="off">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small text-muted">Contraseña</label>
-                        <input type="password" id="login-pass" class="form-control bg-dark-custom" required>
-                    </div>
-                    <div id="login-error" class="text-danger small mb-3 fw-bold d-none">Usuario o contraseña incorrectos.</div>
-                    <button type="submit" class="btn btn-primary-custom w-100 text-white">Validar Identidad</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const ORIGINAL_FALTANTES = [
-        "Mex 15",
-        "Kor 2",
         "Cze 5", "Cze 11",
-        "Bih 16", "Bih 18", "Bih 20",
+        "Bih 18",
         "Qat 19",
         "Sui 15", "Sui 20",
-        "Bra 6", "Bra 13", "Bra 15", "Bra 20",
-        "Mar 18",
+        "Bra 6", "Bra 13", "Bra 15",
         "Sco 7", "Sco 13",
         "Par 7",
         "Aus 12",
-        "Tur 9", "Tur 17",
+        "Tur 17",
         "Ger 9",
-        "Cuw 15", "Cuw 17",
-        "Civ 4", "Civ 9", "Civ 15", "Civ 16", "Civ 19",
-        "Ecu 12", "Ecu 18",
+        "Cuw 17",
+        "Civ 15", "Civ 16", "Civ 19",
+        "Ecu 18",
         "Jpn 9",
         "Swe 6",
-        "Tun 1",
-        "Bel 15", "Bel 20",
+        "Bel 20",
         "Egy 10", "Egy 17",
-        "Nzl 6", "Nzl 11",
-        "Esp 2", "Esp 16",
+        "Nzl 11",
+        "Esp 16",
         "Cpv 7",
-        "Uru 4", "Uru 10", "Uru 12", "Uru 14",
-        "Fra 5", "Fra 7",
+        "Uru 12", "Uru 14",
+        "Fra 7",
         "Nor 12",
         "Arg 13",
         "Aut 13",
-        "Por 11", "Por 13", "Por 14", "Por 20",
+        "Por 13",
         "Cod 5", "Cod 20",
         "Col 14",
         "Eng 2", "Eng 6", "Eng 8", "Eng 18",
         "Pan 11", "Pan 19"
-        ];
+    ];
 
-    
     const ORIGINAL_REPETIDAS = {
-"Fwc 15": 1,
-"Fwc 18": 1,
-"Fwc 13": 1,
-
-"Rsa 1": 1,
-"Rsa 6": 1,
-"Rsa 19": 1,
-"Rsa 11": 1,
-
-"Cze 1": 3,
-"Cze 8": 1,
-"Cze 15": 1,
-"Cze 19": 1,
-
-"Can 18": 1,
-"Can 19": 1,
-
-"Bih 2": 1,
-"Bih 4": 1,
-"Bih 17": 1,
-"Bih 19": 1,
-
-"Swe 19": 1,
-
-"Bra 12": 1,
-
-"Mar 4": 1,
-
-"Hai 20": 1,
-
-"Sco 12": 1,
-
-"Usa 12": 1,
-"Usa 15": 1,
-"Usa 2": 1,
-"Usa 4": 1,
-
-"Par 19": 1,
-"Par 3": 1,
-
-"Aus 8": 1,
-"Aus 14": 2,
-
-"Tur 10": 1,
-"Tur 4": 2,
-
-"Ger 17": 1,
-
-"Civ 13": 1,
-"Civ 2": 1,
-
-"Cuw 9": 1,
-
-"Ecu 5": 1,
-"Ecu 16": 1,
-
-"Ned 7": 2,
-"Ned 20": 1,
-
-"Jpn 1": 1,
-"Jpn 19": 1,
-"Jpn 15": 1,
-
-"Bel 1": 1,
-
-"Egy 6": 1,
-"Egy 4": 2,
-"Egy 3": 1,
-"Egy 1": 1,
-
-"Irn 10": 1,
-"Irn 1": 3,
-
-"Nzl 15": 1,
-"Nzl 7": 1,
-"Nzl 2": 2,
-"Nzl 14": 1,
-
-"Cpv 16": 2,
-"Cpv 9": 1,
-"Cpv 4": 1,
-"Cpv 6": 1,
-"Cpv 20": 1,
-"Cpv 2": 1,
-
-"Ksa 14": 1,
-"Ksa 11": 1,
-
-"Uru 19": 1,
-"Uru 7": 1,
-"Uru 6": 1,
-"Uru 15": 1,
-"Uru 8": 1,
-"Uru 2": 1,
-
-"Sen 7": 1,
-"Sen 4": 1,
-"Sen 20": 1,
-
-"Irq 1": 1,
-"Irq 19": 1,
-
-"Nor 20": 1,
-"Nor 5": 2,
-"Nor 2": 1,
-"Nor 12": 1,
-"Nor 18": 1,
-"Nor 11": 1,
-"Nor 7": 1,
-"Nor 17": 1,
-"Nor 8": 1,
-"Nor 14": 2,
-
-"Jor 18": 1,
-"Jor 10": 1,
-
-"Cod 9": 1,
-"Cod 11": 1,
-"Cod 17": 1,
-"Cod 1": 1,
-"Cod 3": 1,
-
-"Uzb 17": 1,
-"Uzb 10": 1,
-
-"Col 6": 2,
-"Col 9": 1,
-"Col 12": 1,
-"Col 3": 1,
-"Col 11": 1,
-
-"Eng 12": 1,
-"Eng 9": 1,
-"Eng 4": 1,
-
-"Alg 11": 1,
-"Alg 7": 1,
-"Alg 17": 1,
-"Alg 8": 1,
-"Alg 14": 1,
-
-"Cro 20": 1,
-"Cro 1": 1,
-
-"Gha 11": 2,
-"Gha 7": 2,
-"Gha 1": 2,
-"Gha 3": 1,
-
-"Pan 1": 1,
-"Pan 9": 1,
-"Pan 14": 1,
-"Pan 16": 2,
-"Pan 10": 1,
-"Pan 13": 1
-};
-
-
+        "Fwc 15": 1,
+        "Fwc 13": 1,
+        "Rsa 1": 1,
+        "Rsa 6": 1,
+        "Rsa 19": 1,
+        "Rsa 11": 1,
+        "Cze 1": 3,
+        "Cze 8": 1,
+        "Cze 15": 1,
+        "Cze 19": 1,
+        "Can 18": 1,
+        "Can 19": 1,
+        "Bih 17": 1,
+        "Bih 19": 1,
+        "Swe 19": 1,
+        "Mar 4": 1,
+        "Sco 12": 1,
+        "Usa 12": 1,
+        "Usa 15": 1,
+        "Usa 2": 1,
+        "Usa 4": 1,
+        "Par 19": 1,
+        "Par 3": 1,
+        "Aus 8": 1,
+        "Aus 14": 1,
+        "Tur 4": 1,
+        "Ger 17": 1,
+        "Civ 13": 1,
+        "Civ 2": 1,
+        "Cuw 9": 1,
+        "Ecu 5": 1,
+        "Ecu 16": 1,
+        "Ned 7": 2,
+        "Jpn 1": 1,
+        "Jpn 19": 1,
+        "Jpn 15": 1,
+        "Bel 1": 1,
+        "Egy 6": 1,
+        "Egy 4": 2,
+        "Egy 3": 1,
+        "Egy 1": 1,
+        "Irn 1": 3,
+        "Nzl 15": 1,
+        "Nzl 7": 1,
+        "Nzl 2": 2,
+        "Nzl 14": 1,
+        "Cpv 16": 2,
+        "Cpv 9": 1,
+        "Cpv 20": 1,
+        "Cpv 2": 1,
+        "Ksa 14": 1,
+        "Ksa 11": 1,
+        "Uru 7": 1,
+        "Uru 6": 1,
+        "Uru 15": 1,
+        "Uru 8": 1,
+        "Sen 7": 1,
+        "Sen 4": 1,
+        "Sen 20": 1,
+        "Irq 1": 1,
+        "Nor 20": 1,
+        "Nor 5": 2,
+        "Nor 2": 1,
+        "Nor 12": 1,
+        "Nor 18": 1,
+        "Nor 11": 1,
+        "Nor 7": 1,
+        "Nor 17": 1,
+        "Nor 8": 1,
+        "Nor 14": 2,
+        "Jor 10": 1,
+        "Cod 9": 1,
+        "Cod 11": 1,
+        "Cod 17": 1,
+        "Cod 1": 1,
+        "Uzb 17": 1,
+        "Uzb 10": 1,
+        "Col 6": 2,
+        "Col 9": 1,
+        "Col 12": 1,
+        "Col 3": 1,
+        "Col 11": 1,
+        "Eng 12": 1,
+        "Eng 9": 1,
+        "Alg 11": 1,
+        "Alg 7": 1,
+        "Alg 17": 1,
+        "Alg 8": 1,
+        "Alg 14": 1,
+        "Cro 20": 1,
+        "Cro 1": 1,
+        "Gha 11": 2,
+        "Gha 7": 1,
+        "Gha 1": 2,
+        "Gha 3": 1,
+        "Pan 1": 1,
+        "Pan 9": 1,
+        "Pan 14": 1,
+        "Pan 16": 2,
+        "Pan 13": 1
+    };
 
     let faltantes = JSON.parse(localStorage.getItem('tracker_faltantes')) || [...ORIGINAL_FALTANTES];
     let repetidas = JSON.parse(localStorage.getItem('tracker_repetidas')) || {...ORIGINAL_REPETIDAS};
 
-    let accionPendiente = null; 
-    let bsModalInstance = null;
-
     document.addEventListener("DOMContentLoaded", () => {
-        bsModalInstance = new bootstrap.Modal(document.getElementById('loginModal'));
         renderAll();
         setupListeners();
     });
@@ -391,22 +282,6 @@
     function guardarEnStorage() {
         localStorage.setItem('tracker_faltantes', JSON.stringify(faltantes));
         localStorage.setItem('tracker_repetidas', JSON.stringify(repetidas));
-    }
-
-    function verificarAutenticacion(callbackAccion) {
-        const loginTimestamp = localStorage.getItem('tracker_login_time');
-        const ahora = new Date().getTime();
-        const mediaHora = 30 * 60 * 1000; 
-
-        if (loginTimestamp && (ahora - loginTimestamp < mediaHora)) {
-            callbackAccion();
-        } else {
-            localStorage.removeItem('tracker_login_time');
-            accionPendiente = callbackAccion;
-            document.getElementById('login-error').classList.add('d-none');
-            document.getElementById('form-login').reset();
-            bsModalInstance.show();
-        }
     }
 
     function renderAll() {
@@ -491,7 +366,7 @@
                     btnNum.className = "btn btn-sm btn-danger me-1 mb-1 font-monospace px-2 py-0";
                     btnNum.style.fontSize = "0.75rem";
                     btnNum.textContent = num;
-                    btnNum.onclick = () => verificarAutenticacion(() => retirarFaltante(`${prefijo} ${num}`));
+                    btnNum.onclick = () => retirarFaltante(`${prefijo} ${num}`);
                     divControles.appendChild(btnNum);
                 });
 
@@ -548,7 +423,7 @@
                     btnNum.textContent = el.numero !== null ? `${el.numero}` : prefijo;
                     
                     const itemKey = el.numero !== null ? `${prefijo} ${el.numero}` : prefijo;
-                    btnNum.onclick = () => verificarAutenticacion(() => retirarRepetida(itemKey));
+                    btnNum.onclick = () => retirarRepetida(itemKey);
                     divControles.appendChild(btnNum);
                 });
 
@@ -614,7 +489,6 @@
         setTimeout(() => { feedback.textContent = ""; }, 4000);
     }
 
-    // --- NUEVAS FUNCIONES PARA COPIAR AL CLIPBOARD ---
     function copiarAlClipboard(texto, mensajeExito) {
         navigator.clipboard.writeText(texto).then(() => {
             alert(mensajeExito);
@@ -667,111 +541,23 @@
 
         document.getElementById("form-registro").addEventListener("submit", (e) => {
             e.preventDefault();
-            verificarAutenticacion(() => ejecutarRegistro());
+            ejecutarRegistro();
         });
 
         document.getElementById("btn-export-faltantes").addEventListener("click", () => { exportarFaltantesCSV(); });
         document.getElementById("btn-export-repetidas").addEventListener("click", () => { exportarRepetidasCSV(); });
 
         document.getElementById("btn-reset").addEventListener("click", () => {
-            verificarAutenticacion(() => {
-                if(confirm("¿Seguro que deseas BORRAR todos tus cambios guardados y regresar a la base original?")) {
-                    faltantes = [...ORIGINAL_FALTANTES];
-                    repetidas = {...ORIGINAL_REPETIDAS};
-                    localStorage.removeItem('tracker_faltantes');
-                    localStorage.removeItem('tracker_repetidas');
-                    document.getElementById("buscar-faltantes").value = "";
-                    document.getElementById("buscar-repetidas").value = "";
-                    renderAll();
-                }
-            });
-        });
-
-        document.getElementById("form-login").addEventListener("submit", (e) => {
-            e.preventDefault();
-            const user = document.getElementById("login-user").value;
-            const pass = document.getElementById("login-pass").value;
-
-            if (user === "marrano" && pass === "marano") {
-                localStorage.setItem('tracker_login_time', new Date().getTime());
-                bsModalInstance.hide();
-                if (accionPendiente) {
-                    accionPendiente();
-                    accionPendiente = null;
-                }
-            } else {
-                document.getElementById('login-error').classList.remove('d-none');
+            if(confirm("¿Seguro que deseas BORRAR todos tus cambios guardados y regresar a la base original?")) {
+                faltantes = [...ORIGINAL_FALTANTES];
+                repetidas = {...ORIGINAL_REPETIDAS};
+                localStorage.removeItem('tracker_faltantes');
+                localStorage.removeItem('tracker_repetidas');
+                document.getElementById("buscar-faltantes").value = "";
+                document.getElementById("buscar-repetidas").value = "";
+                renderAll();
             }
         });
-
-        document.getElementById("csv-faltantes").addEventListener("change", function(e) {
-            parseCSV(this.files[0], (data) => {
-                let nuevosFaltantes = [];
-                data.forEach(linea => {
-                    if (linea.includes(":")) {
-                        let partes = linea.split(":");
-                        let prefijo = partes[0].trim();
-                        let numeros = partes[1].split(",").map(n => n.trim());
-                        numeros.forEach(num => {
-                            if(num) nuevosFaltantes.push(`${prefijo} ${num}`);
-                        });
-                    } else {
-                        if(linea.trim()) nuevosFaltantes.push(linea.trim());
-                    }
-                });
-                faltantes = nuevosFaltantes;
-                guardarEnStorage();
-                renderFaltantes();
-            });
-        });
-
-        document.getElementById("csv-repetidas").addEventListener("change", function(e) {
-            parseCSV(this.files[0], (data) => {
-                repetidas = {};
-                data.forEach(linea => {
-                    if (linea.includes(":")) {
-                        let partes = linea.split(":");
-                        let prefijo = partes[0].trim();
-                        let subElementos = partes[1].split(",").map(s => s.trim());
-                        
-                        subElementos.forEach(sub => {
-                            let matchCant = sub.match(/^(\d+)\s*\(x(\d+)\)$/);
-                            if (matchCant) {
-                                let num = matchCant[1];
-                                let cant = parseInt(matchCant[2]) || 1;
-                                repetidas[`${prefijo} ${num}`] = cant;
-                            } else {
-                                let matchUnico = sub.match(/^\(x(\d+)\)$/);
-                                if (matchUnico) {
-                                    repetidas[prefijo] = parseInt(matchUnico[1]) || 1;
-                                } else if(sub) {
-                                    repetidas[`${prefijo} ${sub}`] = 1;
-                                }
-                            }
-                        });
-                    } else if(linea.includes(",")) {
-                        let parts = linea.split(",");
-                        repetidas[parts[0].trim()] = parseInt(parts[1]) || 1;
-                    } else {
-                        let limpia = linea.trim();
-                        if(limpia) repetidas[limpia] = (repetidas[limpia] || 0) + 1;
-                    }
-                });
-                guardarEnStorage();
-                renderRepetidas();
-            });
-        });
-    }
-
-    function parseCSV(file, callback) {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            const array = text.split(/\r?\n/).map(item => item.trim()).filter(item => item.length > 0);
-            callback(array);
-        };
-        reader.readAsText(file);
     }
 </script>
 
