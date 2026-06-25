@@ -161,39 +161,35 @@
 
     const ORIGINAL_REPETIDAS = {
         "Rsa 1": 1, "Rsa 6": 1, "Rsa 11": 1,
-        "Cze 1": 2,
-        "Can 18": 1, "Can 19": 1,
-        "Bih 17": 1,
-        "Mar 4": 1,
+        "Cze 1": 1, // 📉 Bajó de 2 a 1
+        "Can 18": 1, // ❌ Can 19 fue eliminada
         "Usa 2": 1, "Usa 12": 1, "Usa 15": 1,
-        "Par 3": 1, "Par 19": 1,
-        "Aus 14": 1, // 🆕 Nuevo país y tarjeta
+        "Par 3": 1, "Par 7": 1, "Par 19": 1, // 🆕 Se agregó Par 7
+        "Aus 14": 1,
         "Ger 17": 1,
         "Cuw 9": 1,
         "Civ 13": 1,
         "Ecu 5": 1, "Ecu 16": 1,
         "Ned 7": 2,
-        "Jpn 1": 1, "Jpn 15": 1, "Jpn 19": 1,
-        "Swe 19": 1,
+        "Jpn 1": 1, "Jpn 15": 1, // ❌ Jpn 19 fue eliminada
         "Bel 1": 1,
-        "Egy 3": 1, "Egy 4": 2, "Egy 6": 1,
+        "Egy 4": 1, "Egy 6": 1, // ❌ Egy 3 fue eliminada y Egy 4 bajó de 2 a 1
         "Irn 1": 3,
         "Nzl 2": 2, "Nzl 14": 1,
         "Cpv 9": 1, "Cpv 16": 2, "Cpv 20": 1,
         "Ksa 11": 1, "Ksa 14": 1,
-        "Uru 6": 1, "Uru 7": 1, "Uru 8": 1, "Uru 15": 1,
+        "Uru 6": 1, "Uru 8": 1, "Uru 15": 1, // ❌ Uru 7 fue eliminada
         "Sen 4": 1, "Sen 7": 1,
         "Irq 1": 1,
-        "Nor 2": 1, "Nor 5": 1, "Nor 14": 1, "Nor 20": 1, // ⚠️ Noruega reducida
-        "Arg 5": 1, "Arg 12": 1, "Arg 18": 1, // 🆕 Nuevo país y tarjetas
-        "Alg 7": 1, "Alg 8": 1, "Alg 14": 1,
-        "Cod 1": 1, "Cod 9": 1, "Cod 11": 1,
+        "Nor 2": 1, "Nor 14": 1, "Nor 20": 1, // ❌ Nor 5 fue eliminada
+        "Arg 5": 1, "Arg 12": 1, "Arg 18": 1,
+        "Alg 8": 1, // ❌ Alg 7 y Alg 14 fueron eliminadas
+        "Cod 11": 1, // ❌ Cod 1 y Cod 9 fueron eliminadas
         "Uzb 10": 1,
-        "Col 6": 1, "Col 9": 1, "Col 11": 1, "Col 12": 1,
-        "Eng 9": 1,
+        "Col 6": 1, "Col 11": 1, // ❌ Col 9 y Col 12 fueron eliminadas
         "Cro 1": 1, "Cro 20": 1,
         "Gha 1": 2, "Gha 3": 1, "Gha 7": 1, "Gha 11": 2,
-        "Pan 1": 1, "Pan 9": 1, "Pan 13": 1, "Pan 14": 1, "Pan 16": 2
+        "Pan 1": 1, "Pan 13": 1, "Pan 16": 1 // ❌ Pan 9 y Pan 14 eliminadas; Pan 16 bajó de 2 a 1
     };
 
     let faltantes = JSON.parse(localStorage.getItem('tracker_faltantes')) || [...ORIGINAL_FALTANTES];
